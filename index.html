@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>dvd papierz</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: blue;
+            /* Wyłączenie możliwości zaznaczania tekstu/obrazka podczas klikania */
+            user-select: none;
+        }
+
+        img {
+            position: absolute;
+            /* Tutaj kontroluj wielkość obrazka */
+            width: 150px; 
+            height: auto;
+            cursor: pointer;
+        }
+
+        button {
+            position: absolute;
+            z-index: 10;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body onclick="document.getElementById('music').play()">
+
+    <button onclick="document.getElementById('music').play()">
+        Włącz Muzykę
+    </button>
+
+    <audio id="music" loop>
+        <source src="muzyka.mp3" type="audio/mpeg">
+    </audio>
+
+    <img src="logo.png" id="logo">
+
+    <script>
+        const logo = document.getElementById("logo");
+        
+        let x = 10;
+        let y = 10;
+        let dx = 3;
+        let dy = 3;
+
+        function move() {
+            x += dx;
+            y += dy;
+
+            // Sprawdzanie kolizji z prawą i lewą krawędzią
+            // offsetWidth pobiera realną szerokość obrazka wyświetlaną na ekranie
+            if (x + logo.offsetWidth >= window.innerWidth || x <= 0) {
+                dx = -dx;
+                changeColor();
+            }
+
+            // Sprawdzanie kolizji z górną i dolną krawędzią
+            if (y + logo.offsetHeight >= window.innerHeight || y <= 0) {
+                dy = -dy;
+                changeColor();
+            }
+
+            logo.style.left = x + "px";
+            logo.style.top = y + "px";
+        }
+
+        function changeColor() {
+            // Generuje losowy kolor tła w formacie HSL
+            document.body.style.background = `hsl(${Math.random() * 360}, 70%, 50%)`;
+        }
+
+        // Odświeżanie co 10ms (100 klatek na sekundę)
+        setInterval(move, 10);
+
+        // Opcjonalne: dopasowanie pozycji przy zmianie rozmiaru okna
+        window.onresize = () => {
+            x = 0;
+            y = 0;
+        };
+    </script>
+
+</body>
+</html>
